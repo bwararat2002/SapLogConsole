@@ -1,0 +1,11 @@
+/Users/wararat.j/Downloads/ApiLogger.Core/src/ApiLogger.Core/bin/Release/net9.0/ApiLogger.Core.deps.json
+/Users/wararat.j/Downloads/ApiLogger.Core/src/ApiLogger.Core/bin/Release/net9.0/ApiLogger.Core.dll
+/Users/wararat.j/Downloads/ApiLogger.Core/src/ApiLogger.Core/bin/Release/net9.0/ApiLogger.Core.pdb
+/Users/wararat.j/Downloads/ApiLogger.Core/src/ApiLogger.Core/obj/Release/net9.0/ApiLogger.Core.GeneratedMSBuildEditorConfig.editorconfig
+/Users/wararat.j/Downloads/ApiLogger.Core/src/ApiLogger.Core/obj/Release/net9.0/ApiLogger.Core.AssemblyInfoInputs.cache
+/Users/wararat.j/Downloads/ApiLogger.Core/src/ApiLogger.Core/obj/Release/net9.0/ApiLogger.Core.AssemblyInfo.cs
+/Users/wararat.j/Downloads/ApiLogger.Core/src/ApiLogger.Core/obj/Release/net9.0/ApiLogger.Core.csproj.CoreCompileInputs.cache
+/Users/wararat.j/Downloads/ApiLogger.Core/src/ApiLogger.Core/obj/Release/net9.0/ApiLogger.Core.dll
+/Users/wararat.j/Downloads/ApiLogger.Core/src/ApiLogger.Core/obj/Release/net9.0/refint/ApiLogger.Core.dll
+/Users/wararat.j/Downloads/ApiLogger.Core/src/ApiLogger.Core/obj/Release/net9.0/ApiLogger.Core.pdb
+/Users/wararat.j/Downloads/ApiLogger.Core/src/ApiLogger.Core/obj/Release/net9.0/ref/ApiLogger.Core.dll

@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>ApiLogger.Core</id>
+    <version>1.0.0</version>
+    <authors>YourCompany</authors>
+    <description>Background API logging package. Captures incoming requests (Middleware)
+      and outgoing requests (DelegatingHandler), then sends them to a central
+      Log API (CreateLog) asynchronously without blocking the caller.</description>
+    <repository type="git" />
+    <dependencies>
+      <group targetFramework="net10.0" />
+      <group targetFramework="net8.0" />
+      <group targetFramework="net9.0" />
+    </dependencies>
+    <frameworkReferences>
+      <group targetFramework="net10.0">
+        <frameworkReference name="Microsoft.AspNetCore.App" />
+      </group>
+      <group targetFramework="net8.0">
+        <frameworkReference name="Microsoft.AspNetCore.App" />
+      </group>
+      <group targetFramework="net9.0">
+        <frameworkReference name="Microsoft.AspNetCore.App" />
+      </group>
+    </frameworkReferences>
+  </metadata>
+  <files>
+    <file src="/Users/wararat.j/Downloads/ApiLogger.Core/src/ApiLogger.Core/bin/Debug/net10.0/ApiLogger.Core.dll" target="lib/net10.0/ApiLogger.Core.dll" />
+    <file src="/Users/wararat.j/Downloads/ApiLogger.Core/src/ApiLogger.Core/bin/Debug/net8.0/ApiLogger.Core.dll" target="lib/net8.0/ApiLogger.Core.dll" />
+    <file src="/Users/wararat.j/Downloads/ApiLogger.Core/src/ApiLogger.Core/bin/Debug/net9.0/ApiLogger.Core.dll" target="lib/net9.0/ApiLogger.Core.dll" />
+  </files>
+</package>
