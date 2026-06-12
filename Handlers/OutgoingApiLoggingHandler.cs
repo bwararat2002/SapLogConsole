@@ -69,7 +69,9 @@ public class OutgoingApiLoggingHandler : DelegatingHandler
             {
                 SourceSystem = _options.SourceSystem,
                 ProgramCode = _options.ProgramCode,
-                TransactionType = GetHeader(request, "X-Transaction-Type"),
+                TransactionType = _options.ResolveTransactionType(
+                    GetHeader(request, "X-Transaction-Type"),
+                    request.RequestUri?.AbsolutePath),
                 ReferenceDocNo = GetHeader(request, "X-Reference-DocNo"),
                 ReferenceItemNo = GetHeader(request, "X-Reference-ItemNo"),
                 Status = status,

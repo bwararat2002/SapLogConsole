@@ -7,7 +7,7 @@
     <description>Background API logging package. Captures incoming requests (Middleware)
       and outgoing requests (DelegatingHandler), then sends them to a central
       Log API (CreateLog) asynchronously without blocking the caller.</description>
-    <repository type="git" />
+    <repository type="git" commit="90405e6241eec19669ea098c2f24fc44c9c9d1ca" />
     <dependencies>
       <group targetFramework="net10.0" />
       <group targetFramework="net8.0" />

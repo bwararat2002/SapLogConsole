@@ -9,3 +9,4 @@
 /Users/wararat.j/Downloads/ApiLogger.Core/src/ApiLogger.Core/obj/Release/net8.0/refint/ApiLogger.Core.dll
 /Users/wararat.j/Downloads/ApiLogger.Core/src/ApiLogger.Core/obj/Release/net8.0/ApiLogger.Core.pdb
 /Users/wararat.j/Downloads/ApiLogger.Core/src/ApiLogger.Core/obj/Release/net8.0/ref/ApiLogger.Core.dll
+/Users/wararat.j/Downloads/ApiLogger.Core/src/ApiLogger.Core/obj/Release/net8.0/ApiLogger.Core.sourcelink.json

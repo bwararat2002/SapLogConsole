@@ -9,7 +9,7 @@
 
     <!-- NuGet package info -->
     <PackageId>ApiLogger.Core</PackageId>
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
     <Authors>YourCompany</Authors>
     <Description>
       Background API logging package. Captures incoming requests (Middleware)

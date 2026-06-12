@@ -5,7 +5,7 @@
   },
   "projects": {
     "/Users/wararat.j/Downloads/ApiLogger.Core/src/ApiLogger.Core/ApiLogger.Core.csproj": {
-      "version": "1.0.0",
+      "version": "1.0.1",
       "restore": {
         "projectUniqueName": "/Users/wararat.j/Downloads/ApiLogger.Core/src/ApiLogger.Core/ApiLogger.Core.csproj",
         "projectName": "ApiLogger.Core",

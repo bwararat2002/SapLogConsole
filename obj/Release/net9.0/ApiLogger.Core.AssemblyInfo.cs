@@ -16,7 +16,7 @@ using System.Reflection;
     "    and outgoing requests (DelegatingHandler), then sends them to a central\n    " +
     "  Log API (CreateLog) asynchronously without blocking the caller.\n    "))]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+90405e6241eec19669ea098c2f24fc44c9c9d1ca")]
 [assembly: System.Reflection.AssemblyProductAttribute("ApiLogger.Core")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ApiLogger.Core")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

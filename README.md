@@ -63,7 +63,19 @@ var builder = WebApplication.CreateBuilder(args);
 // 1) ลงทะเบียน ApiLogger (อ่าน config จาก section "ApiLogger")
 builder.Services.AddApiLogger(builder.Configuration);
 
-// 2) (ออปชัน) ตั้งค่า HttpClient สำหรับยิงไป API อื่น พร้อม log ขาออกอัตโนมัติ
+// 2) (ออปชัน) ตั้งค่า error callback เมื่อส่ง log ไม่สำเร็จหลัง retry ครบ
+builder.Services.Configure<ApiLoggerOptions>(options =>
+{
+    options.OnSendError = (ex, entry) =>
+    {
+        // ex = exception ถ้าเกิด network/timeout error
+        //     หรือ HttpRequestException พร้อม status code ถ้า API ตอบ non-success
+        Console.Error.WriteLine($"[ApiLogger] ส่ง log ไม่สำเร็จ: {ex.Message} | Command={entry.Command}");
+        // หรือจะแจ้งเตือนผ่าน Slack, email, หรือ monitoring ก็ได้
+    };
+});
+
+// 3) (ออปชัน) ตั้งค่า HttpClient สำหรับยิงไป API อื่น พร้อม log ขาออกอัตโนมัติ
 builder.Services.AddHttpClient("SapApi", client =>
 {
     client.BaseAddress = new Uri("http://sap-host/sap-api/");

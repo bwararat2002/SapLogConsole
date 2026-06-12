@@ -43,9 +43,15 @@ public class LogSender : ILogSender
         }
 
         var json = JsonSerializer.Serialize(entry, JsonOptions);
+        var maxAttempts = Math.Max(1, _options.MaxRetryCount);
+        Exception? lastException = null;
+        int? lastStatusCode = null;
 
-        for (var attempt = 1; attempt <= Math.Max(1, _options.MaxRetryCount); attempt++)
+        for (var attempt = 1; attempt <= maxAttempts; attempt++)
         {
+            lastException = null;
+            lastStatusCode = null;
+
             try
             {
                 using var request = new HttpRequestMessage(HttpMethod.Post, _options.CreateLogUrl)
@@ -65,25 +71,45 @@ public class LogSender : ILogSender
                     return;
                 }
 
+                lastStatusCode = (int)response.StatusCode;
                 _logger.LogWarning(
                     "ApiLogger: CreateLog API returned {StatusCode} (attempt {Attempt}/{MaxAttempt}). Command={Command}",
-                    (int)response.StatusCode, attempt, _options.MaxRetryCount, entry.Command);
+                    lastStatusCode, attempt, maxAttempts, entry.Command);
             }
             catch (Exception ex)
             {
+                lastException = ex;
                 _logger.LogWarning(ex,
                     "ApiLogger: failed to send log to CreateLog API (attempt {Attempt}/{MaxAttempt}). Command={Command}",
-                    attempt, _options.MaxRetryCount, entry.Command);
+                    attempt, maxAttempts, entry.Command);
             }
 
-            if (attempt < _options.MaxRetryCount)
+            if (attempt < maxAttempts)
             {
                 await Task.Delay(_options.RetryDelayMilliseconds, cancellationToken);
             }
         }
 
-        // ส่งไม่สำเร็จแม้ retry ครบแล้ว -> ไม่ throw ต่อ เพื่อไม่ให้กระทบ flow หลักของระบบ
+        // ส่งไม่สำเร็จแม้ retry ครบแล้ว
         _logger.LogError("ApiLogger: giving up sending log after {MaxAttempt} attempts. Command={Command}",
-            _options.MaxRetryCount, entry.Command);
+            maxAttempts, entry.Command);
+
+        if (_options.OnSendError is not null)
+        {
+            // lastException จะเป็น null ถ้าเหตุผลที่ fail คือ API ตอบ non-success status code
+            // ในกรณีนั้นให้สร้าง HttpRequestException เพื่อให้ผู้ใช้ได้รับ context ที่มีประโยชน์
+            var errorToReport = lastException
+                ?? new HttpRequestException(
+                    $"ApiLogger: CreateLog API returned non-success status code {lastStatusCode} for Command={entry.Command}");
+
+            try
+            {
+                _options.OnSendError(errorToReport, entry);
+            }
+            catch (Exception callbackEx)
+            {
+                _logger.LogError(callbackEx, "ApiLogger: exception thrown inside OnSendError callback.");
+            }
+        }
     }
 }

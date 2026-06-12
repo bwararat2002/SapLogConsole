@@ -1,3 +1,5 @@
+using ApiLogger.Core.Models;
+
 namespace ApiLogger.Core.Options;
 
 /// <summary>
@@ -14,7 +16,7 @@ public class ApiLoggerOptions
     /// <summary>รหัสโปรแกรม/โมดูล (เช่น "WB2025-012")</summary>
     public string ProgramCode { get; set; } = string.Empty;
 
-    /// <summary>URL แบบเต็มของ Log API เช่น http://192.168.0.100/ApiItManagement/api/Log/CreateLog</summary>
+    /// <summary>URL แบบเต็มของ Log API เช่น http://xxxx/CreateLog</summary>
     public string CreateLogUrl { get; set; } = string.Empty;
 
     /// <summary>ค่า header "apiKey" สำหรับยิงไปที่ Log API</summary>
@@ -22,6 +24,51 @@ public class ApiLoggerOptions
 
     /// <summary>ผู้สร้าง log ถ้าไม่มี user login จะใช้ค่านี้แทน (default: SourceSystem)</summary>
     public string? DefaultCreatedBy { get; set; }
+
+    /// <summary>
+    /// ค่า transactionType เริ่มต้น ถ้า request ไม่ได้ส่ง header X-Transaction-Type มา
+    /// และไม่ match กับ PathTransactionTypeMap เช่น "General" — ถ้าไม่ตั้งค่าจะเป็น null
+    /// </summary>
+    public string? DefaultTransactionType { get; set; }
+
+    /// <summary>
+    /// Map จาก path prefix → transactionType แบบ SAP เช่น PR, PO, GR, GI, Billing
+    /// ลำดับความสำคัญ: header X-Transaction-Type > PathTransactionTypeMap > DefaultTransactionType
+    /// <para>
+    /// ตัวอย่างใน appsettings.json:
+    /// <code>
+    /// "PathTransactionTypeMap": {
+    ///   "/purchase-requisition": "PR",
+    ///   "/purchase-order":       "PO",
+    ///   "/goods-receipt":        "GR",
+    ///   "/goods-issue":          "GI",
+    ///   "/billing":              "Billing"
+    /// }
+    /// </code>
+    /// </para>
+    /// </summary>
+    public Dictionary<string, string> PathTransactionTypeMap { get; set; } = [];
+
+    /// <summary>
+    /// Resolve transactionType จาก path โดยใช้ PathTransactionTypeMap
+    /// (เปรียบเทียบแบบ StartsWith, case-insensitive)
+    /// </summary>
+    internal string? ResolveTransactionType(string? headerValue, string? path)
+    {
+        if (!string.IsNullOrWhiteSpace(headerValue))
+            return headerValue;
+
+        if (!string.IsNullOrWhiteSpace(path) && PathTransactionTypeMap.Count > 0)
+        {
+            foreach (var (prefix, txType) in PathTransactionTypeMap)
+            {
+                if (path.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+                    return txType;
+            }
+        }
+
+        return DefaultTransactionType;
+    }
 
     /// <summary>เปิด/ปิดการ log request ที่ "เข้ามา" ที่ API นี้ (Middleware)</summary>
     public bool EnableIncomingLogging { get; set; } = true;
@@ -43,4 +90,20 @@ public class ApiLoggerOptions
 
     /// <summary>หน่วงเวลา (ms) ก่อน retry แต่ละครั้ง</summary>
     public int RetryDelayMilliseconds { get; set; } = 2000;
+
+    /// <summary>
+    /// Callback ที่จะถูกเรียกเมื่อส่ง log ไปยัง CreateLog API ไม่สำเร็จหลัง retry ครบทุกครั้ง
+    /// หรือเมื่อ API ตอบกลับมาด้วย non-success status code
+    /// <para>
+    /// ตัวอย่าง:
+    /// <code>
+    /// OnSendError = (ex, entry) =>
+    /// {
+    ///     // ex จะเป็น null ถ้า API ตอบกลับ non-success (ใช้ LastStatusCode แทน)
+    ///     Console.Error.WriteLine($"[ApiLogger] ส่ง log ไม่สำเร็จ: {ex?.Message ?? "non-success response"} | Command={entry.Command}");
+    /// }
+    /// </code>
+    /// </para>
+    /// </summary>
+    public Action<Exception?, LogEntry>? OnSendError { get; set; }
 }

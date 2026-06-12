@@ -87,7 +87,9 @@ public class ApiRequestLoggingMiddleware
             {
                 SourceSystem = _options.SourceSystem,
                 ProgramCode = _options.ProgramCode,
-                TransactionType = context.Request.Headers["X-Transaction-Type"].FirstOrDefault(),
+                TransactionType = _options.ResolveTransactionType(
+                    context.Request.Headers["X-Transaction-Type"].FirstOrDefault(),
+                    context.Request.Path.Value),
                 ReferenceDocNo = context.Request.Headers["X-Reference-DocNo"].FirstOrDefault(),
                 ReferenceItemNo = context.Request.Headers["X-Reference-ItemNo"].FirstOrDefault(),
                 Status = status,
